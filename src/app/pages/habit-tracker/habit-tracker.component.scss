@@ -1,0 +1,113 @@
+.habit-tracker {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: 'Arial', sans-serif;
+    animation: fadeIn 1.5s ease-in-out;
+
+    h1 {
+        text-align: center;
+        font-size: 2.5rem;
+        color: #6cb2eb;
+        margin-bottom: 10px;
+        
+    }
+
+    .add-habit-form {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+
+        input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 8px 16px;
+            border: none;
+            background-color: #6cb2eb;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+
+            &:disabled {
+                background-color: #ccc;
+                cursor: not-allowed;
+            }
+        }
+    }
+
+    .habit-list {
+        list-style: none;
+        padding: 0;
+
+        .habit-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+
+            .habit-info {
+                display: flex;
+                flex-direction: column;
+
+                strong {
+                    font-size: 1.2em;
+                    color: #333;
+                }
+
+                span {
+                    font-size: 0.9em;
+                    color: #666;
+                }
+            }
+
+            .habit-log {
+                input {
+                    width: 80px;
+                    padding: 5px;
+                    border: 1px solid #ddd;
+                    border-radius: 4px;
+                }
+            }
+        }
+    }
+}
+
+/* Fade-In Keyframe Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* Fade-Out Keyframe Animation */
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+/* Global Fade-In Class */
+.fade-in {
+    animation: fadeIn 1.5s ease-in-out;
+}
+
+/* Global Fade-Out Class */
+.fade-out {
+    animation: fadeOut 1.5s ease-in-out;
+}

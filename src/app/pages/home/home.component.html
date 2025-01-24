@@ -3,36 +3,36 @@
     <p class="fade-in">
       Welcome to Daeleez. What are we going to try to accomplish today?
     </p>
-    <form [formGroup]="tasksForm">
-      <input
-        type="text"
-        formControlName="taskInput"
-        (keydown)="addTask($event)"
-        placeholder="Type a task and hit Enter"
-      />
+    <form [formGroup]="tasksForm" (ngSubmit)="addTask()">
+      <div class="input-container">
+        <input
+          type="text"
+          formControlName="taskInput"
+          (keydown.enter)="addTask()"
+          placeholder="Type a task and hit Enter"
+        />
+        
+      </div>
+      <div class="centered-tasks">
+        <button type="submit">Add Task</button>
+      </div>
+      
     </form>
-  
+  <div class="centered-tasks">
     <ul>
-      @for (task of tasks; track task.id) {
-      <li class="fade-in">
-        {{ task.text }}
-      </li>
-      }
-    </ul>
+        @for (task of tasks; track task.id) {
+        <li class="fade-in">
+          {{ task.text }}
+        </li>
+        }
+      </ul>
+  </div>
+    
   
-    <button
-      class="start-day-btn"
-      (click)="startDay()"
-      [disabled]="tasks.length === 0"
-    >
+    <button class="start-day-btn" (click)="startDay()" [disabled]="tasks.length === 0">
       Start Your Day
     </button>
-    <button
-      class="start-day-btn"
-      (click)="resetData()"
-      [disabled]="tasks.length === 0"
-    >
+    <button class="start-day-btn" (click)="resetData()" [disabled]="tasks.length === 0">
       Reset
     </button>
   </div>
-  

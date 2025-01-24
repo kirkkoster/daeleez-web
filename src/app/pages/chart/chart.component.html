@@ -1,29 +1,41 @@
-<div [class.fade-out]="isFadingOut" class="visualization">
-    <h2>Task Visualization</h2>
+<div class="visualization">
     <div class="controls">
-      <label for="chartType">Chart Type:</label>
-      <select id="chartType" [formControl]="chartTypeControl">
-        <option value="pie">Pie Chart</option>
-        <option value="heatmap">Heatmap</option>
-        <option value="line">Line Chart</option>
-      </select>
+        <label for="chartType">Chart Type:</label>
+        <select id="chartType" [formControl]="chartTypeControl">
+            <option value="line">Line Chart</option>
+            <option value="bar">Bar Chart</option>
+            <option value="donut">Donut Chart</option>
+            <option value="radar">Radar Chart</option>
+            <option value="area">Area Chart</option>
+        </select>
     </div>
 
-    @if (chartTypeControl.value === 'pie') {
-        <canvasjs-chart [options]="chartOptions"></canvasjs-chart>
-    }
-    @if (chartTypeControl.value === 'heatmap') {
-        <div class="heatmap">
-            <div style="text-align: center; color:red;">Heatmap will arrive as soon as it's ready!</div>
-            
-        <!-- Heatmap would go here, use a library like ApexCharts for this -->
+    @if (chartOptions.chart.type != 'donut') {
+    <div class="chart-section">
+        <h2>Task Visualization</h2>
+        <apx-chart [series]="chartOptions.series" [labels]="chartOptions.labels" [colors]="chartOptions.colors"
+            [responsive]="chartOptions.responsive" [chart]="chartOptions.chart" [xaxis]="chartOptions.xaxis"
+            [dataLabels]="chartOptions.dataLabels" [title]="chartOptions.title">
+        </apx-chart>
     </div>
     }
-    @if (chartTypeControl.value === 'line') {
-        <canvasjs-chart [options]="chartOptions"></canvasjs-chart>
+    @if (chartOptions.chart.type == 'donut') {
+        <h2>Task Visualization</h2>
+    <div class="chart-container">
+        <apx-chart [series]="chartOptions.series" [labels]="chartOptions.labels" [colors]="chartOptions.colors"
+            [responsive]="chartOptions.responsive" [chart]="chartOptions.chart" [xaxis]="chartOptions.xaxis"
+            [dataLabels]="chartOptions.dataLabels" [title]="chartOptions.title" [plotOptions]="chartOptions.plotOptions"
+            [dataLabels]="chartOptions.dataLabels">
+        </apx-chart>
+    </div>
     }
 
-</div>
-<div style="text-align: center; color:red;">
-    this is using dummy data. this feature will be available soon
+    @if (hasHabits) {
+    <div class="chart-section">
+        <h2>Habit Visualization</h2>
+        <apx-chart [series]="heatmapOptions.series" [chart]="heatmapOptions.chart" [xaxis]="heatmapOptions.xaxis"
+            [title]="heatmapOptions.title">
+        </apx-chart>
+    </div>
+    }
 </div>

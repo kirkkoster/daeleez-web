@@ -7,6 +7,7 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DailyTask } from '../../shared/models/daily-tasks.interface';
+import { DataService } from '../../services/data.service';
 
 @Component({
   selector: 'app-home',
@@ -19,73 +20,72 @@ export class HomeComponent {
   tasksForm: FormGroup;
   isFadingOut = false;
   tasks: DailyTask[] = []; // List of tasks
-  newTaskText: string = ''; // Holds the text for the new task
 
-  constructor(private fb: FormBuilder, private router: Router) {
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private dataService: DataService // Inject DataService
+  ) {
     this.tasksForm = new FormGroup({
       taskInput: new FormControl(''), // Task input control
     });
   }
 
   ngOnInit() {
-    const storedTasks = localStorage.getItem('tasks');
     const today = new Date().toISOString().split('T')[0]; // Get today's date
+    const allTasks = this.dataService.getData<DailyTask>('dailyTasks'); // Use DataService
 
-    if (storedTasks) {
-      const allTasks: DailyTask[] = JSON.parse(storedTasks);
-      // Filter tasks for today
-      this.tasks = allTasks.filter((task) => task.date === today);
-    } else {
-      this.tasks = [];
-    }
+    // Filter tasks for today
+    this.tasks = allTasks.filter((task) => task.date === today);
   }
 
   resetData() {
     const today = new Date().toISOString().split('T')[0];
-  
-    // Retrieve all tasks from localStorage
-    const storedTasks = localStorage.getItem('dailyTasks');
-    const allTasks = storedTasks ? JSON.parse(storedTasks) : [];
-  
+
+    // Retrieve all tasks from DataService
+    const allTasks = this.dataService.getData<DailyTask>('dailyTasks');
+
     // Filter out today's tasks
-    const updatedTasks = allTasks.filter((task: any) => task.date !== today);
-  
-    // Save the updated tasks back to localStorage
-    localStorage.setItem('dailyTasks', JSON.stringify(updatedTasks));
-  
+    const updatedTasks = allTasks.filter((task) => task.date !== today);
+
+    // Save the updated tasks back using DataService
+    this.dataService.saveData('dailyTasks', updatedTasks);
+
     // Clear the form
     this.tasksForm.reset();
-  
+
     // Clear the in-memory tasks array
     this.tasks = [];
   }
 
-  saveTasks() {
-    localStorage.setItem('tasks', JSON.stringify(this.tasks));
-  }
-
-  addTask(event: KeyboardEvent) {
-    if (event.key === 'Enter' && this.tasksForm.value.taskInput.trim() !== '') {
-      const today = new Date().toISOString().split('T')[0];
-
-      this.tasks.push({
-        id: this.tasks.length + 1, // Generate a unique ID
-        text: this.tasksForm.value.taskInput.trim(),
-        isSelected: false,
-        date: today,
-        completed: false
-      });
-
-      // Save the updated task list to localStorage
-      const storedTasks = localStorage.getItem('dailyTasks');
-      const allTasks: DailyTask[] = storedTasks ? JSON.parse(storedTasks) : [];
-      const otherTasks = allTasks.filter((task) => task.date !== today); // Keep non-today tasks
-      localStorage.setItem(
-        'dailyTasks',
-        JSON.stringify([...otherTasks, ...this.tasks])
-      );
-
-      this.tasksForm.reset();
+  addTask(event?: KeyboardEvent) {
+    if (!event || (event.type === 'submit' || (event instanceof KeyboardEvent && event.key === 'Enter'))) {
+      const taskText = this.tasksForm.value.taskInput.trim();
+      if (taskText !== '') {
+        const today = new Date().toISOString().split('T')[0];
+  
+        // Create a new task
+        const newTask: DailyTask = {
+          id: this.tasks.length + 1, // Generate a unique ID
+          text: taskText,
+          isSelected: false,
+          date: today,
+          completed: false,
+        };
+  
+        // Add the task to the in-memory array
+        this.tasks.push(newTask);
+  
+        // Retrieve all tasks from DataService
+        const allTasks = this.dataService.getData<DailyTask>('dailyTasks');
+  
+        // Remove today's tasks and add updated tasks
+        const otherTasks = allTasks.filter((task) => task.date !== today);
+        this.dataService.saveData('dailyTasks', [...otherTasks, ...this.tasks]);
+  
+        // Reset the form
+        this.tasksForm.reset();
+      }
     }
   }
 

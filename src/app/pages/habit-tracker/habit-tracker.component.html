@@ -1,0 +1,47 @@
+<div class="habit-tracker">
+    <h1>Habit Tracker</h1>
+  
+    <!-- Add Habit Form -->
+    <form [formGroup]="habitForm" (ngSubmit)="addHabit()" class="add-habit-form">
+      <input
+        type="text"
+        formControlName="name"
+        placeholder="Enter habit name"
+        required
+      />
+      <input
+        type="number"
+        formControlName="frequency"
+        placeholder="Times/week"
+        required
+      />
+      <input
+        type="number"
+        formControlName="duration"
+        placeholder="Minutes/session"
+        required
+      />
+      <button type="submit" [disabled]="habitForm.invalid">Add Habit</button>
+    </form>
+  
+    <!-- Habit List -->
+    <ul class="habit-list">
+        @for (habit of habits; track $index) {
+      <li class="habit-item">
+        <div class="habit-info">
+          <strong>{{ habit.name }}</strong>
+          <span>{{ habit.frequency }} times/week</span>
+          <span>{{ habit.duration }} mins/session</span>
+        </div>
+        <div class="habit-log">
+          <input
+            type="number"
+            placeholder="Minutes done"
+            (change)="logMinutes(habit, getDatesForDisplay()[6], $event)"
+          />
+        </div>
+      </li>
+    }
+    </ul>
+  </div>
+  

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DailyTask } from '../../shared/models/daily-tasks.interface';
+import { DataService } from '../../services/data.service';
 
 @Component({
   selector: 'app-tasks',
@@ -15,30 +16,32 @@ export class TasksComponent implements OnInit {
   tasksForm!: FormGroup;
   isFadingOut = false;
 
-  constructor(private fb: FormBuilder, private router: Router) {}
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private dataService: DataService // Inject the data service
+  ) {}
 
   ngOnInit() {
     const today = new Date().toISOString().split('T')[0];
-    const storedData = localStorage.getItem('dailyTasks');
-    if (storedData) {
-      const allTasks: DailyTask[] = JSON.parse(storedData);
-      // Filter tasks for today
-      this.tasks = allTasks.filter((task) => task.date === today);
-    } else {
-      this.tasks = [];
-    }
+    const allTasks = this.dataService.getData<DailyTask>('dailyTasks'); // Use DataService
+
+    // Filter tasks for today
+    this.tasks = allTasks.filter((task) => task.date === today);
   }
 
   toggleTaskSelection(task: DailyTask) {
     task.isSelected = !task.isSelected;
-  
-    // Optional: Save the updated tasks to localStorage immediately
-    localStorage.setItem('dailyTasks', JSON.stringify(this.tasks));
+
+    // Save updated tasks using the DataService
+    this.dataService.saveData('dailyTasks', this.tasks);
   }
 
   markTaskComplete(task: DailyTask) {
     task.isSelected = !task.isSelected;
-    localStorage.setItem('dailyTasks', JSON.stringify(this.tasks));
+
+    // Save updated tasks using the DataService
+    this.dataService.saveData('dailyTasks', this.tasks);
   }
 
   toggleSelection(task: DailyTask) {
@@ -47,19 +50,17 @@ export class TasksComponent implements OnInit {
   }
 
   saveTasks() {
-    // Save incomplete tasks back to localStorage
-    const incompleteTasks = this.tasks
-      .filter((task) => !task.isSelected)
-      .map((task) => task.text);
-    localStorage.setItem('dailyTasks', JSON.stringify(incompleteTasks));
+    // Save incomplete tasks back to the storage
+    const incompleteTasks = this.tasks.filter((task) => !task.isSelected);
+    this.dataService.saveData('dailyTasks', incompleteTasks);
   }
 
   endDay() {
-    const today = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
-  
+    const today = new Date().toISOString().split('T')[0];
+
     const completedTasks = this.tasks.filter((task) => task.isSelected);
     const incompleteTasks = this.tasks.filter((task) => !task.isSelected);
-  
+
     // Show an encouraging alert
     alert(
       `Great job! You completed ${completedTasks.length} tasks.\n` +
@@ -67,30 +68,28 @@ export class TasksComponent implements OnInit {
           ? `It’s okay! We’ll try to finish the rest tomorrow.`
           : `You completed all your tasks!`)
     );
-  
-    // Retrieve all tasks from localStorage
-    const storedData = localStorage.getItem('dailyTasks');
-    const allTasks: DailyTask[] = storedData ? JSON.parse(storedData) : [];
-  
+
+    // Retrieve all tasks from storage
+    const allTasks = this.dataService.getData<DailyTask>('dailyTasks');
+
     // Update tasks with completed/incomplete status
     const updatedTasks: DailyTask[] = this.tasks.map((task) => ({
       ...task,
       completed: task.isSelected,
     }));
-  
-    // Merge today's tasks with existing tasks in localStorage
+
+    // Merge today's tasks with existing tasks in storage
     const filteredTasks = allTasks.filter((task) => task.date !== today);
     const newTasks = [...filteredTasks, ...updatedTasks];
-  
-    // Save updated tasks back to localStorage
-    localStorage.setItem('dailyTasks', JSON.stringify(newTasks));
-  
+
+    // Save updated tasks back to storage using DataService
+    this.dataService.saveData('dailyTasks', newTasks);
+
     // Trigger fade-out animation
     this.isFadingOut = true;
-  
+
     setTimeout(() => {
       this.router.navigate(['/chart']);
     }, 1400); // Matches the fade-out duration
   }
-  
 }

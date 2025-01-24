@@ -9,7 +9,9 @@
               [checked]="task.isSelected"
               (change)="toggleTaskSelection(task)"
             />
-            {{ task.text }}
+            <span class="task-text">
+                {{ task.text }}
+            </span>
           </label>
         </li>
       }
