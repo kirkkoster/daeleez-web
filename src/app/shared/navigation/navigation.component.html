@@ -1,0 +1,31 @@
+<div class="bubble-menu" [class.open]="isOpen">
+    <!-- Hamburger Icon -->
+    @if (!isOpen) {
+    <button class="menu-btn" (click)="toggleMenu()" aria-label="Open menu">
+        ☰
+    </button>
+    }
+
+    <!-- Expanded Menu -->
+    @if (isOpen) {
+    <div class="menu-content">
+
+        <ul>
+            <li>
+                <button class="close-btn" (click)="toggleMenu()" aria-label="Close menu">
+                    ✖
+                </button>
+            </li>
+            <li>
+                <button (click)="navigateAndClose('/')">Home</button>
+            </li>
+            <li>
+                <button (click)="navigateAndClose('/tasks')">Tasks</button>
+            </li>
+            <li>
+                <button (click)="navigateAndClose('/chart')">Charts</button>
+            </li>
+        </ul>
+    </div>
+    }
+</div>

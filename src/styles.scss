@@ -1,1 +1,97 @@
 /* You can add global styles to this file, and also import other style files */
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap');
+
+/* Body Styling */
+body {
+  font-family: 'Quicksand', sans-serif;
+  background-color: #f8f9fa;
+  /* Soft neutral */
+  color: #343a40;
+  /* Dark gray for text */
+  margin: 0;
+  padding: 0;
+}
+
+/* Buttons */
+button {
+  background-color: #6cb2eb;
+  /* Soft blue */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #5a9fd6;
+  /* Slightly darker blue */
+}
+
+/* Form Elements */
+textarea,
+input {
+  width: 100%;
+  max-width: 400px;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+/* Centering Utility */
+.centered {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+textarea,
+input,
+button {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+
+  button:hover {
+    transform: scale(1.05);
+    background-color: #5a9fd6;
+  }
+}
+
+/* Fade-In Keyframe Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* Fade-Out Keyframe Animation */
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+/* Global Fade-In Class */
+.fade-in {
+  animation: fadeIn 1.5s ease-in-out;
+}
+
+/* Global Fade-Out Class */
+.fade-out {
+  animation: fadeOut 1.5s ease-in-out;
+}

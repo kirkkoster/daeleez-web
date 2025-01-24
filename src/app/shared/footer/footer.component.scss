@@ -1,0 +1,21 @@
+.footer {
+    text-align: center;
+    padding: 10px;
+    font-size: 0.9rem;
+    color: #6c757d; /* Neutral gray color for calming tone */
+    background-color: #f8f9fa; /* Soft background for separation */
+    border-bottom: 1px solid #e0e0e0; /* Subtle border for definition */
+    margin-top: 20px;
+    max-width: 500px;
+  
+    a {
+      color: #6cb2eb; /* Soft blue for links */
+      text-decoration: none;
+  
+      &:hover {
+        text-decoration: underline;
+        color: #5a9fd6; /* Slightly darker blue on hover */
+      }
+    }
+  }
+  

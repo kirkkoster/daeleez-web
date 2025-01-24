@@ -1,0 +1,83 @@
+.welcome {
+    text-align: center;
+  
+    h1 {
+      font-size: 2.5rem;
+      color: #6cb2eb;
+      margin-bottom: 10px;
+      animation: fadeIn 1.5s ease-in-out;
+    }
+  
+    p {
+      font-size: 1.2rem;
+      color: #495057;
+      margin-bottom: 20px;
+      animation: fadeIn 2s ease-in-out;
+    }
+  
+    input[type="text"] {
+      width: 100%;
+      max-width: 400px;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 1rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+  
+    ul {
+      list-style-type: none;
+      padding: 0;
+  
+      li {
+        font-size: 1.2rem;
+        color: #343a40;
+        margin: 5px 0;
+        animation: fadeIn 1s ease-in-out;
+      }
+    }
+  
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 1.2rem;
+      background-color: #6cb2eb;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+  
+      &:hover {
+        background-color: #5a9fd6;
+      }
+  
+      &:disabled {
+        background-color: #d6d6d6;
+        cursor: not-allowed;
+      }
+    }
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+  
+    to {
+      opacity: 1;
+    }
+  }
+  
+  .welcome {
+    animation: fadeIn 1.5s ease-in-out;
+  }
+  
+  .fade-out {
+    animation: fadeOut 1.5s ease-in-out;
+  }
+  .start-day-btn {
+    margin-left: 22px;
+  }
+  

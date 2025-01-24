@@ -1,0 +1,18 @@
+<div class="tasks" [class.fade-out]="isFadingOut">
+    <h1>Your Tasks</h1>
+    <ul>
+      @for (task of tasks; track task.id) {
+        <li>
+          <label>
+            <input
+              type="checkbox"
+              [checked]="task.isSelected"
+              (change)="toggleTaskSelection(task)"
+            />
+            {{ task.text }}
+          </label>
+        </li>
+      }
+    </ul>
+    <button (click)="endDay()">End Day</button>
+  </div>
