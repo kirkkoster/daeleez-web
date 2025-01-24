@@ -14,7 +14,7 @@
         
       </div>
       <div class="centered-tasks">
-        <button type="submit">Add Task</button>
+        <button [disabled]="tasksForm.get('taskInput')?.value?.trim() === ''" type="submit">Add Task</button>
       </div>
       
     </form>
