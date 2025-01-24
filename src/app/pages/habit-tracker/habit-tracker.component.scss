@@ -69,11 +69,25 @@
             }
 
             .habit-log {
+                display: flex;
                 input {
-                    width: 80px;
+                    width: 96px;
                     padding: 5px;
                     border: 1px solid #ddd;
                     border-radius: 4px;
+                }
+
+                .delete-habit {
+                    margin-left:3px;
+                    margin-top:7px;
+                    color: red;
+                    font-size: 1.5rem;
+                    cursor: pointer;
+                    transition: color 0.3s ease;
+                
+                    &:hover {
+                      color: darkred; /* Slightly darker red on hover */
+                    }
                 }
             }
         }

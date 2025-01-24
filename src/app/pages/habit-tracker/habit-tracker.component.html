@@ -35,10 +35,12 @@
         </div>
         <div class="habit-log">
           <input
+            style="width: 96px;"
             type="number"
-            placeholder="Minutes done"
+            placeholder="minutes done"
             (change)="logMinutes(habit, getDatesForDisplay()[6], $event)"
           />
+          <div class="delete-habit" (click)="deleteHabit(habit.id)">&#x2716;</div>
         </div>
       </li>
     }

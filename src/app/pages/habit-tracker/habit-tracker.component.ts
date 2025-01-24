@@ -48,6 +48,15 @@ export class HabitTrackerComponent implements OnInit {
     }
   }
 
+  deleteHabit(habitId: number) {
+    // Filter out the habit to be deleted
+    this.habits = this.habits.filter((habit) => habit.id !== habitId);
+  
+    // Save the updated habits back to the DataService
+    this.dataService.saveData('habits', this.habits);
+  }
+  
+
  logMinutes(habit: Habit, date: string, $event: any) {
   let minutes = $event.target.value
   const timeSpent = Number(minutes) || 0; // Convert to a number, default to 0
