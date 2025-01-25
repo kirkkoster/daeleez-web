@@ -1,41 +1,68 @@
 <div [class]="{ 'fade-out': isFadingOut }" class="visualization">
-    <div class="controls">
-        <label for="chartType">Chart Type:</label>
-        <select id="chartType" [formControl]="chartTypeControl">
-            <option value="line">Line Chart</option>
-            <option value="bar">Bar Chart</option>
-            <option value="donut">Donut Chart</option>
-            <option value="radar">Radar Chart</option>
-            <option value="area">Area Chart</option>
-        </select>
-    </div>
-    <p style="color:red">the data presented here is fake. Charts are coming soon with your data!</p>
-    @if (chartOptions.chart.type != 'donut') {
-    <div class="chart-section">
-        <h2>Task Visualization</h2>
-        <apx-chart [series]="chartOptions.series" [labels]="chartOptions.labels" [colors]="chartOptions.colors"
-            [responsive]="chartOptions.responsive" [chart]="chartOptions.chart" [xaxis]="chartOptions.xaxis"
-            [dataLabels]="chartOptions.dataLabels" [title]="chartOptions.title">
-        </apx-chart>
-    </div>
-    }
-    @if (chartOptions.chart.type == 'donut') {
-        <h2>Task Visualization</h2>
-    <div class="chart-container">
-        <apx-chart [series]="chartOptions.series" [labels]="chartOptions.labels" [colors]="chartOptions.colors"
-            [responsive]="chartOptions.responsive" [chart]="chartOptions.chart" [xaxis]="chartOptions.xaxis"
-            [dataLabels]="chartOptions.dataLabels" [title]="chartOptions.title" [plotOptions]="chartOptions.plotOptions"
-            [dataLabels]="chartOptions.dataLabels">
-        </apx-chart>
-    </div>
-    }
+  @if (hasTasks) {
+  <div class="controls">
+    <label for="chartType">Chart Type:</label>
+    <select id="chartType" [formControl]="chartTypeControl">
+      <option value="line">Line Chart</option>
+      <option value="bar">Bar Chart</option>
+      <option value="donut">Donut Chart</option>
+      <option value="radar">Radar Chart</option>
+      <option value="area">Area Chart</option>
+    </select>
+  </div>
 
-    @if (hasHabits) {
-    <div class="chart-section">
-        <h2>Habit Visualization</h2>
-        <apx-chart [series]="heatmapOptions.series" [chart]="heatmapOptions.chart" [xaxis]="heatmapOptions.xaxis"
-            [title]="heatmapOptions.title">
-        </apx-chart>
-    </div>
-    }
+  @if (chartOptions.chart.type != 'donut') {
+  <div class="chart-section">
+    <h2>Task Visualization</h2>
+    <apx-chart
+      [series]="chartOptions.series"
+      [labels]="chartOptions.labels"
+      [colors]="chartOptions.colors"
+      [responsive]="chartOptions.responsive"
+      [chart]="chartOptions.chart"
+      [xaxis]="chartOptions.xaxis"
+      [dataLabels]="chartOptions.dataLabels"
+      [title]="chartOptions.title"
+    >
+    </apx-chart>
+  </div>
+  } @else if (chartOptions.chart.type == 'donut') {
+  <h2>Task Visualization</h2>
+  <div class="chart-container">
+    <apx-chart
+      [series]="chartOptions.series"
+      [labels]="chartOptions.labels"
+      [colors]="chartOptions.colors"
+      [responsive]="chartOptions.responsive"
+      [chart]="chartOptions.chart"
+      [xaxis]="chartOptions.xaxis"
+      [dataLabels]="chartOptions.dataLabels"
+      [title]="chartOptions.title"
+      [plotOptions]="chartOptions.plotOptions"
+      [dataLabels]="chartOptions.dataLabels"
+    >
+    </apx-chart>
+  </div>
+  } } @else {
+  <p style="color: cornflowerblue">
+    As your days are complete and you log complete and incomplete tasks, you
+    will be able to see charts representing your data!
+  </p>
+  } @if (hasHabits) {
+  <div class="chart-section">
+    <h2>Habit Visualization</h2>
+    <apx-chart
+      [series]="heatmapOptions.series"
+      [chart]="heatmapOptions.chart"
+      [xaxis]="heatmapOptions.xaxis"
+      [title]="heatmapOptions.title"
+    >
+    </apx-chart>
+  </div>
+  } @else {
+  <p style="color: cornflowerblue">
+    if you choose to use the habit tracker, you will see a heatmap of your
+    progress here.
+  </p>
+  }
 </div>

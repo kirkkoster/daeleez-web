@@ -4,7 +4,13 @@ import { CommonModule } from '@angular/common';
 import { DailyTask } from '../../shared/models/daily-tasks.interface';
 import { DataService } from '../../services/data.service';
 import { Habit } from '../../shared/models/habit.interface';
-import { ApexAxisChartSeries, ApexChart, ApexXAxis, ApexTitleSubtitle, NgApexchartsModule, ChartType } from 'ng-apexcharts';
+import {
+  ApexAxisChartSeries,
+  ApexChart,
+  ApexXAxis,
+  ApexTitleSubtitle,
+  NgApexchartsModule,
+} from 'ng-apexcharts';
 
 export type HeatmapChartOptions = {
   series: ApexAxisChartSeries;
@@ -22,23 +28,25 @@ export type HeatmapChartOptions = {
   imports: [ReactiveFormsModule, CommonModule, NgApexchartsModule],
 })
 export class ChartComponent implements OnInit {
-  completedTasks: { date: string; completed: number; incomplete: number }[] = [];
+  completedTasks: { date: string; completed: number; incomplete: number }[] =
+    [];
   chartTypeControl = new FormControl<string>('donut');
   chartData: any;
   isFadingOut = false;
   chartType: string = 'line';
   chartOptions: any;
   hasHabits: boolean = true;
+  hasTasks: boolean = true;
   habits: Habit[] | undefined;
-  habitChartOptions!: { title: { text: string; }; data: { type: string; dataPoints: { label: string; y: number; }[]; }[]; };
+  habitChartOptions!: {
+    title: { text: string };
+    data: { type: string; dataPoints: { label: string; y: number }[] }[];
+  };
   heatmapOptions: any;
 
-  constructor(private dataService: DataService) { }
+  constructor(private dataService: DataService) {}
 
   ngOnInit() {
-    this.addDummyData(); // Add dummy task data
-    this.addHabitDummyData(); // Add dummy habit data
-
     // Load initial charts
     this.loadChartData(this.chartTypeControl.value ?? 'bar');
 
@@ -48,18 +56,15 @@ export class ChartComponent implements OnInit {
         this.loadChartData(type);
       }
     });
-
-    this.loadHabits();
     this.prepareHeatmapData();
-
   }
 
-  loadHabits() {
-    this.habits = this.dataService.getData<Habit>('habits');
-  }
+  loadHabits() {}
 
   prepareHeatmapData() {
-    if (this.habits) {
+    this.habits = this.dataService.getData<Habit>('habits');
+    console.log(this.hasHabits);
+    if (this.habits?.length > 0) {
       this.hasHabits = true;
       const allDates = Array.from(
         new Set(this.habits.flatMap((habit) => Object.keys(habit.records)))
@@ -91,7 +96,11 @@ export class ChartComponent implements OnInit {
 
   loadChartData(type: string) {
     const allTasks = this.dataService.getData<DailyTask>('dailyTasks') || [];
-
+    if (allTasks.length > 0) {
+      this.hasTasks = true;
+    } else {
+      this.hasTasks = false;
+    }
     const groupedData = allTasks.reduce((acc: any, task: any) => {
       acc[task.date] = acc[task.date] || { completed: 0, incomplete: 0 };
       if (task.completed) {
@@ -113,7 +122,6 @@ export class ChartComponent implements OnInit {
 
     const dates = Object.keys(groupedData);
     if (type === 'donut') {
-
       this.chartOptions = {
         series: [totalCompleted, totalIncomplete],
         labels: ['Completed Tasks', 'Incomplete Tasks'],
@@ -127,7 +135,7 @@ export class ChartComponent implements OnInit {
           enabled: true,
           formatter: function (val: number) {
             return val.toFixed(1) + '%'; // Display percentages
-          }
+          },
         },
         plotOptions: {
           pie: {
@@ -150,8 +158,8 @@ export class ChartComponent implements OnInit {
               },
             },
           ],
-        }
-      }
+        },
+      };
     } else {
       // Handle other chart types (e.g., line, bar, etc.)
       const dataPoints = Object.keys(groupedData).map((date) => ({
@@ -185,59 +193,6 @@ export class ChartComponent implements OnInit {
         },
       };
     }
-  }
-
-
-  addHabitDummyData() {
-    const dummyHabits = [
-      {
-        id: 1,
-        name: 'Exercise',
-        frequency: 3, // Target frequency: 3 times a week
-        duration: 30, // Target duration: 30 minutes per session
-        records: {
-          '2025-01-20': { completed: true, timeSpent: 30 },
-          '2025-01-21': { completed: false, timeSpent: 0 },
-          '2025-01-22': { completed: true, timeSpent: 45 },
-          '2025-01-23': { completed: true, timeSpent: 20 },
-          '2025-01-24': { completed: false, timeSpent: 0 },
-        },
-      },
-      {
-        id: 2,
-        name: 'Read',
-        frequency: 5, // Target frequency: 5 times a week
-        duration: 60, // Target duration: 60 minutes per session
-        records: {
-          '2025-01-20': { completed: true, timeSpent: 60 },
-          '2025-01-21': { completed: true, timeSpent: 30 },
-          '2025-01-22': { completed: false, timeSpent: 10 },
-          '2025-01-23': { completed: true, timeSpent: 40 },
-          '2025-01-24': { completed: true, timeSpent: 60 },
-        },
-      },
-    ];
-
-    this.dataService.saveData<Habit>('habits', dummyHabits);
-  }
-
-
-
-  addDummyData() {
-    const dummyTasks = [
-      { id: 1, text: 'Task 1', isSelected: false, date: '2025-01-19', completed: true },
-      { id: 2, text: 'Task 2', isSelected: false, date: '2025-01-19', completed: true },
-      { id: 3, text: 'Task 3', isSelected: false, date: '2025-01-19', completed: false },
-      { id: 4, text: 'Task 4', isSelected: false, date: '2025-01-20', completed: true },
-      { id: 5, text: 'Task 5', isSelected: false, date: '2025-01-20', completed: false },
-      { id: 6, text: 'Task 6', isSelected: false, date: '2025-01-21', completed: true },
-      { id: 7, text: 'Task 7', isSelected: false, date: '2025-01-21', completed: false },
-      { id: 8, text: 'Task 8', isSelected: false, date: '2025-01-22', completed: true },
-      { id: 9, text: 'Task 9', isSelected: false, date: '2025-01-22', completed: true },
-      { id: 10, text: 'Task 10', isSelected: false, date: '2025-01-23', completed: false },
-    ];
-
-    this.dataService.saveData('dailyTasks', dummyTasks); // Save dummy data using DataService
   }
 
   updateChart(type: string) {
